@@ -1,5 +1,7 @@
 package com.skyveo.foodpouch;
 
+import com.skyveo.foodpouch.item.ModItems;
+import net.minecraft.world.item.CreativeModeTabs;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -26,6 +28,7 @@ public class FoodPouch {
     public FoodPouch(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
         NeoForge.EVENT_BUS.register(this);
+        ModItems.load(modEventBus);
         modEventBus.addListener(this::addCreative);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
@@ -34,6 +37,9 @@ public class FoodPouch {
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey() == CreativeModeTabs.FOOD_AND_DRINKS) {
+            event.accept(ModItems.FOOD_POUCH);
+        }
     }
 
     @SubscribeEvent
